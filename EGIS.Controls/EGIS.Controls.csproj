@@ -2,16 +2,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!--<TargetFramework>net6.0-windows</TargetFramework>-->
-    <TargetFrameworks>net472;net47;net6.0-windows</TargetFrameworks>    
+    <TargetFrameworks>net47;net472;net6.0-windows</TargetFrameworks>    
     <OutputType>Library</OutputType>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>egis.snk</AssemblyOriginatorKeyFile>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <Version>4.8.8</Version>
     <Authors>Winston Fletcher</Authors>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Description>Easy GIS .NET Desktop Map Controls</Description>
     <PackageTags>C# GIS Map Control; Easy GIS .NET; C# GIS library</PackageTags>
     <RepositoryUrl>https://github.com/wfletcher/EasyGIS.NET</RepositoryUrl>
@@ -22,6 +22,8 @@
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
+    <Nullable>disable</Nullable>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DocumentationFile>bin\Debug\EGIS.Controls.XML</DocumentationFile>

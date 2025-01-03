@@ -59,6 +59,7 @@ namespace EGIS.Controls
 			this.Name = "SFMap";
 			this.Size = new System.Drawing.Size(607, 398);
 			this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

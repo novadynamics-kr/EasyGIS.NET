@@ -26,164 +26,19 @@
 #endregion
 
 
+using EGIS.Projections;
+using EGIS.ShapeFileLib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
+using System.IO;
 using System.Windows.Forms;
 using System.Xml;
-using EGIS.ShapeFileLib;
-using EGIS.Projections;
-using System.IO;
 
-[assembly: CLSCompliant(true)]
+//[assembly: CLSCompliant(true)]
 namespace EGIS.Controls
 {
-    /// <summary>
-    /// delegate to called to handle progress project loading
-    /// </summary>
-    /// <param name="totalLayers"></param>
-    /// <param name="numberLayersLoaded"></param>
-    public delegate void ProgressLoadStatusHandler(int totalLayers, int numberLayersLoaded);
-
-    
-    /// <summary>
-    /// Pan/Select model enumeration
-    /// </summary>
-    public enum PanSelectMode { 
-        /// <summary>
-        /// None defined
-        /// </summary>
-        None,
-        /// <summary>
-        /// Pan mode
-        /// </summary>
-        Pan, 
-        /// <summary>
-        /// Click select mode
-        /// </summary>
-        ClickSelect,
-        /// <summary>
-        /// Rectangular select mode
-        /// </summary>
-        SelectRectangle, 
-        /// <summary>
-        /// Circular select mode
-        /// </summary>
-        SelectCircle,
-        /// <summary>
-        /// Polygon select mode
-        /// </summary>
-        SelectPolygon,
-        /// <summary>
-        /// Zoom map to selected rectangle
-        /// </summary>
-        ZoomRectangle,
-        /// <summary>
-        /// Zoom map to fit selected circle
-        /// </summary>
-        ZoomCircle
-    };
-
-    /// <summary>
-    /// Enumeration defining enabled keys used for mouse selection
-    /// </summary>
-    [Flags]
-    public enum SelectKeys
-    {
-        /// <summary>
-        /// No keys used for selection
-        /// </summary>
-        None = 0,
-        /// <summary>
-        /// Toggle selection enabled when control key is down and the mouse is dragged.
-        /// </summary>
-        ControlKey=1,
-        /// <summary>
-        /// Selection enabled when shift key is down and the mouse is dragged
-        /// </summary>
-        ShiftKey=2,
-        /// <summary>
-        /// Polgon selection enabled when the alt key is down and the mouse is clicked
-        /// </summary>
-        AltKey=4,
-        /// <summary>
-        /// control and shift keys enabled
-        /// </summary>
-        ControlAndShiftKeys = ControlKey|ShiftKey,
-        /// <summary>
-        /// Control Shift And Alt Keys enabled
-        /// </summary>
-        AllKeys = ControlKey|ShiftKey|AltKey
-    }
-
-    /// <summary>
-    /// enumeration defining which layers should be redrawn when the map is refreshed 
-    /// </summary>
-    [Flags]
-    public enum RefreshMode
-    {
-        /// <summary>
-        /// No layers are re-drawn when the map is refreshed. The SFMap control is double buffered RefreshMode.None can be used 
-        /// to clear any user painting in the Paint event, without an expensive redraw of teh layers
-        /// </summary>
-        None = 0,
-        /// <summary>
-        /// Only BaseMap layers are re-drawn when the map is refreshed
-        /// </summary>
-        BaseMapLayer = 1,
-        /// <summary>
-        /// Only Background layers are re-drawn when the map is refreshed
-        /// </summary>
-        BackgroundLayers = 2,
-        /// <summary>
-        /// Only Foreground layers are re-drawn when the map is refreshed
-        /// </summary>
-        ForegroundLayers = 4,
-        /// <summary>
-        /// Both Background and Foreground layers are re-drawn when the map is refreshed
-        /// </summary>
-        AllLayers = BackgroundLayers | ForegroundLayers
-    }
-
-    /// <summary>
-    /// Enumeration defining the z-index position that layers are added to the map
-    /// </summary>
-    public enum LayerPositionEnum
-    {
-        /// <summary>
-        /// Layer is added to the background. Background layers are drawn underneath Foreground layers
-        /// </summary>
-        Background,
-        /// <summary>
-        /// Layer is added to the foreground. Foreground layers are drawn ontop of Background layers
-        /// </summary>
-        Foreground 
-    }
-
-
-    /// <summary>
-    /// MouseWheel Zoom Enumeration
-    /// </summary>
-    public enum MouseWheelZoomMode
-    {
-        /// <summary>
-        /// Default behaviour. Moving mouse wheel forward zooms in, Moving mouse wheel backward zooms out
-        /// </summary>
-        Default,
-        /// <summary>
-        /// Reverse behaviour (ESRI default). Moving mouse wheel backwards zooms in, Moving mouse wheel forward zooms out.
-        /// </summary>
-        Reverse,
-        /// <summary>
-        /// Disable zoooming with mouse wheel
-        /// </summary>
-        Disabled
-
-    }
-
     /// <summary>
     /// SFMap (ShapeFile Map) is a .NET ShapeFile Control which displays shapefiles in a .NET Windows Form application
     /// </summary>
@@ -473,12 +328,16 @@ namespace EGIS.Controls
 
         #endregion
 
+
         /// <summary>
         /// SFMap contructor
         /// </summary>
-        public SFMap(int CRSById = EGIS.Projections.CoordinateReferenceSystemFactory.Wgs84EpsgCode)
+        public SFMap()
         {
+            int CRSById = EGIS.Projections.CoordinateReferenceSystemFactory.Wgs84EpsgCode;
+
             InitializeComponent();
+
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.SetStyle(ControlStyles.Selectable, true);
             _mapBackColor = BackColor;
@@ -490,8 +349,44 @@ namespace EGIS.Controls
             //set default CRS to WGS84
             try
             {
-                var crs = EGIS.Projections.CoordinateReferenceSystemFactory.Default.GetCRSById(CRSById);
-                MapCoordinateReferenceSystem = crs;
+                if (!DesignMode)
+                {
+                    var crs = EGIS.Projections.CoordinateReferenceSystemFactory.Default.GetCRSById(CRSById);
+                    MapCoordinateReferenceSystem = crs;
+                }
+            }
+            catch
+            {
+            }
+            MaxZoomLevel = double.MaxValue;
+            ZoomLevel = 1.0;
+
+            MouseWheelZoomMode = MouseWheelZoomMode.Default;
+        }
+
+        /// <summary>
+        /// SFMap contructor
+        /// </summary>
+        public SFMap(int CRSById = EGIS.Projections.CoordinateReferenceSystemFactory.Wgs84EpsgCode)
+        {
+            InitializeComponent();
+
+            this.SetStyle(ControlStyles.ResizeRedraw, true);
+            this.SetStyle(ControlStyles.Selectable, true);
+            _mapBackColor = BackColor;
+            this.layerTooltip.IsBalloon = _useBalloonToolTip;
+            if (_useBalloonToolTip)
+            {
+                this.toolTipOffset = new Point(5, 5);
+            }
+            //set default CRS to WGS84
+            try
+            {
+                if (!DesignMode)
+                {
+                    var crs = EGIS.Projections.CoordinateReferenceSystemFactory.Default.GetCRSById(CRSById);
+                    MapCoordinateReferenceSystem = crs;
+                }
             }
             catch
             {
@@ -3104,6 +2999,150 @@ namespace EGIS.Controls
         }
 
         #endregion
+
+    }
+
+    /// <summary>
+    /// delegate to called to handle progress project loading
+    /// </summary>
+    /// <param name="totalLayers"></param>
+    /// <param name="numberLayersLoaded"></param>
+    public delegate void ProgressLoadStatusHandler(int totalLayers, int numberLayersLoaded);
+
+
+    /// <summary>
+    /// Pan/Select model enumeration
+    /// </summary>
+    public enum PanSelectMode
+    {
+        /// <summary>
+        /// None defined
+        /// </summary>
+        None,
+        /// <summary>
+        /// Pan mode
+        /// </summary>
+        Pan,
+        /// <summary>
+        /// Click select mode
+        /// </summary>
+        ClickSelect,
+        /// <summary>
+        /// Rectangular select mode
+        /// </summary>
+        SelectRectangle,
+        /// <summary>
+        /// Circular select mode
+        /// </summary>
+        SelectCircle,
+        /// <summary>
+        /// Polygon select mode
+        /// </summary>
+        SelectPolygon,
+        /// <summary>
+        /// Zoom map to selected rectangle
+        /// </summary>
+        ZoomRectangle,
+        /// <summary>
+        /// Zoom map to fit selected circle
+        /// </summary>
+        ZoomCircle
+    };
+
+    /// <summary>
+    /// Enumeration defining enabled keys used for mouse selection
+    /// </summary>
+    [Flags]
+    public enum SelectKeys
+    {
+        /// <summary>
+        /// No keys used for selection
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// Toggle selection enabled when control key is down and the mouse is dragged.
+        /// </summary>
+        ControlKey = 1,
+        /// <summary>
+        /// Selection enabled when shift key is down and the mouse is dragged
+        /// </summary>
+        ShiftKey = 2,
+        /// <summary>
+        /// Polgon selection enabled when the alt key is down and the mouse is clicked
+        /// </summary>
+        AltKey = 4,
+        /// <summary>
+        /// control and shift keys enabled
+        /// </summary>
+        ControlAndShiftKeys = ControlKey | ShiftKey,
+        /// <summary>
+        /// Control Shift And Alt Keys enabled
+        /// </summary>
+        AllKeys = ControlKey | ShiftKey | AltKey
+    }
+
+    /// <summary>
+    /// enumeration defining which layers should be redrawn when the map is refreshed 
+    /// </summary>
+    [Flags]
+    public enum RefreshMode
+    {
+        /// <summary>
+        /// No layers are re-drawn when the map is refreshed. The SFMap control is double buffered RefreshMode.None can be used 
+        /// to clear any user painting in the Paint event, without an expensive redraw of teh layers
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// Only BaseMap layers are re-drawn when the map is refreshed
+        /// </summary>
+        BaseMapLayer = 1,
+        /// <summary>
+        /// Only Background layers are re-drawn when the map is refreshed
+        /// </summary>
+        BackgroundLayers = 2,
+        /// <summary>
+        /// Only Foreground layers are re-drawn when the map is refreshed
+        /// </summary>
+        ForegroundLayers = 4,
+        /// <summary>
+        /// Both Background and Foreground layers are re-drawn when the map is refreshed
+        /// </summary>
+        AllLayers = BackgroundLayers | ForegroundLayers
+    }
+
+    /// <summary>
+    /// Enumeration defining the z-index position that layers are added to the map
+    /// </summary>
+    public enum LayerPositionEnum
+    {
+        /// <summary>
+        /// Layer is added to the background. Background layers are drawn underneath Foreground layers
+        /// </summary>
+        Background,
+        /// <summary>
+        /// Layer is added to the foreground. Foreground layers are drawn ontop of Background layers
+        /// </summary>
+        Foreground
+    }
+
+
+    /// <summary>
+    /// MouseWheel Zoom Enumeration
+    /// </summary>
+    public enum MouseWheelZoomMode
+    {
+        /// <summary>
+        /// Default behaviour. Moving mouse wheel forward zooms in, Moving mouse wheel backward zooms out
+        /// </summary>
+        Default,
+        /// <summary>
+        /// Reverse behaviour (ESRI default). Moving mouse wheel backwards zooms in, Moving mouse wheel forward zooms out.
+        /// </summary>
+        Reverse,
+        /// <summary>
+        /// Disable zoooming with mouse wheel
+        /// </summary>
+        Disabled
 
     }
 }
