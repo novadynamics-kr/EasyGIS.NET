@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using NUnit.Compatibility;
 using EGIS.Projections;
 using EGIS.ShapeFileLib;
 using System.Reflection;
@@ -20,10 +21,10 @@ namespace UnitTests
 			int geoCount = EGIS.Projections.CoordinateReferenceSystemFactory.Default.GeographicCoordinateSystems.Count;
 			int projCount = EGIS.Projections.CoordinateReferenceSystemFactory.Default.ProjectedCoordinateSystems.Count;
 
-			Assert.NotZero(geoCount);
-			Assert.NotZero(projCount);
+            Assert.That(geoCount, Is.Not.Zero);
+            Assert.That(projCount, Is.Not.Zero);
 
-		}
+        }
 
 		[Test]
 		public void TransformWgs84ToPseudoMercRoundTrip()
@@ -39,9 +40,9 @@ namespace UnitTests
 
 				PointD roundTripPt = transformation.Transform(pseudoMercPt,TransformDirection.Inverse);
 
-				Assert.AreEqual(wgs84Pt.X, roundTripPt.X, Delta);
-				Assert.AreEqual(wgs84Pt.Y, roundTripPt.Y, Delta);
-			}
+                Assert.That(roundTripPt.X, Is.EqualTo(wgs84Pt.X).Within(Delta));
+                Assert.That(roundTripPt.Y, Is.EqualTo(wgs84Pt.Y).Within(Delta));
+            }
 		}
 
 		[Test]
@@ -58,13 +59,13 @@ namespace UnitTests
 
 				double dist = Math.Sqrt(Math.Pow(gda94Pt.X - gda2020.X, 2) + Math.Pow(gda94Pt.Y - gda2020.Y, 2));
 
-				Assert.AreEqual(dist, 1.492, 0.001);
-				PointD roundTripPt = transformation.Transform(gda2020, TransformDirection.Inverse);
+                Assert.That(dist, Is.EqualTo(1.492).Within(0.001));
+                PointD roundTripPt = transformation.Transform(gda2020, TransformDirection.Inverse);
 
-				Assert.AreEqual(gda94Pt.X, roundTripPt.X, Delta);
-				Assert.AreEqual(gda94Pt.Y, roundTripPt.Y, Delta);
-			}
-		}
+                Assert.That(roundTripPt.X, Is.EqualTo(gda94Pt.X).Within(Delta));
+                Assert.That(roundTripPt.Y, Is.EqualTo(gda94Pt.Y).Within(Delta));
+            }
+        }
 
 		/// <summary>
 		/// tests that converting a point from GDA94 -> GDA2020 and back again via wgs84
@@ -93,16 +94,16 @@ namespace UnitTests
 				PointD gda2020 = gda94ToGda2020Transform.Transform(gda94Pt);
 
 				double dist = Math.Sqrt(Math.Pow(gda94Pt.X - gda2020.X, 2) + Math.Pow(gda94Pt.Y - gda2020.Y, 2));
-				Assert.AreEqual(dist, 1.492, 0.001);//expected
+                Assert.That(dist, Is.EqualTo(1.492).Within(0.001));
 
-				PointD wgs84Pt = gda2020ToWgs84Transform.Transform(gda2020);
+                PointD wgs84Pt = gda2020ToWgs84Transform.Transform(gda2020);
 
 				PointD gda94PtRoundTrip = gda94ToWgs84Transform.Transform(wgs84Pt, TransformDirection.Inverse);
 
-				Assert.AreEqual(gda94Pt.X, gda94PtRoundTrip.X, Delta);
-				Assert.AreEqual(gda94Pt.Y, gda94PtRoundTrip.Y, Delta);
-			}
-		}
+                Assert.That(gda94PtRoundTrip.X, Is.EqualTo(gda94Pt.X).Within(Delta));
+                Assert.That(gda94PtRoundTrip.Y, Is.EqualTo(gda94Pt.Y).Within(Delta));
+            }
+        }
 
 		[Test]
 		public void TransformWgs84To27700RoundTrip()
@@ -116,14 +117,14 @@ namespace UnitTests
 				PointD wgs84Pt = new PointD(1,51);
 				PointD txPt = transformation.Transform(wgs84Pt);
 
-				Assert.IsFalse(double.IsNaN(txPt.X));
-				Assert.IsFalse(double.IsNaN(txPt.Y));
+                Assert.That(txPt.X, Is.Not.NaN);
+                Assert.That(txPt.Y, Is.Not.NaN);
 
-				PointD roundTripPt = transformation.Transform(txPt, TransformDirection.Inverse);
+                PointD roundTripPt = transformation.Transform(txPt, TransformDirection.Inverse);
 
-				Assert.AreEqual(wgs84Pt.X, roundTripPt.X, Delta);
-				Assert.AreEqual(wgs84Pt.Y, roundTripPt.Y, Delta);
-			}
+                Assert.That(roundTripPt.X, Is.EqualTo(wgs84Pt.X).Within(Delta));
+                Assert.That(roundTripPt.Y, Is.EqualTo(wgs84Pt.Y).Within(Delta));
+            }
 		}
 
 
@@ -251,7 +252,8 @@ namespace UnitTests
 			Console.Out.WriteLine("dist4:{0:0.00000000}km ", dist4 / 1000);
 			Console.Out.WriteLine("dist5:{0:0.00000000}km ", dist5 / 1000);
 
-			Assert.AreEqual(dist4, 390224.992585395, Delta); //Sql server stDistance = 390224.992585395
+			Assert.That(dist4, Is.EqualTo(390224.992585395).Within(Delta)); //Sql server stDistance = 390224.992585395
+
 
 
 			wgs84PtA = new PointD(-5.539267, 50.118445);
@@ -283,7 +285,7 @@ namespace UnitTests
 			Console.Out.WriteLine("dist4:{0:0.00000}km ", dist4 / 1000);
 			Console.Out.WriteLine("dist5:{0:0.00000}km ", dist5 / 1000);
 
-			Assert.AreEqual(dist4, 411386.590670174, Delta); //Sql StDistance
+			Assert.That(dist4, Is.EqualTo(411386.590670174).Within(Delta)); //Sql StDistance
 
 
 			wgs84PtA = new PointD(0, 0);
@@ -331,11 +333,8 @@ namespace UnitTests
 			Console.Out.WriteLine("proj bearing:{0:0.00000}deg ", projDistAndBearing.Item2);
 
 			//confirm results same as proj results
-			Assert.AreEqual(dist4, projDistAndBearing.Item1, Delta);
-			Assert.AreEqual(bearing, projDistAndBearing.Item2, Delta);
-
-
-
+			Assert.That(dist4, Is.EqualTo(projDistAndBearing.Item1).Within(Delta));
+            Assert.That(bearing, Is.EqualTo(projDistAndBearing.Item2).Within(Delta));
 
 			wgs84PtA = new PointD(0, 0);
 			wgs84PtB = new PointD(10, 10);
@@ -361,13 +360,13 @@ namespace UnitTests
 			Console.Out.WriteLine("dist5:{0:0.00000}km ", projDistAndBearing.Item1 / 1000);
 			Console.Out.WriteLine("proj bearing:{0:0.00000}deg ", projDistAndBearing.Item2);
 
-			//confirm results same as proj results
-			Assert.AreEqual(dist4, projDistAndBearing.Item1, Delta);
-			Assert.AreEqual(bearing, projDistAndBearing.Item2, Delta);
+            //confirm results same as proj results
+            Assert.That(dist4, NUnit.Framework.Is.EqualTo(projDistAndBearing.Item1).Within(Delta));
+            Assert.That(bearing, NUnit.Framework.Is.EqualTo(projDistAndBearing.Item2).Within(Delta));
 
 
-			
-			wgs84PtA = new PointD(145, -37);
+
+            wgs84PtA = new PointD(145, -37);
 			wgs84PtB = new PointD(150, 10);
 			db = EGIS.ShapeFileLib.ConversionFunctions.GeodesicDistanceAndBearingBetweenLatLonPoints(
 				ConversionFunctions.Wgs84RefEllipse, wgs84PtA.Y, wgs84PtA.X,
@@ -387,8 +386,8 @@ namespace UnitTests
 			Console.Out.WriteLine("proj bearing:{0:0.00000}deg ", projDistAndBearing.Item2);
 
 			//confirm results same as proj results
-			Assert.AreEqual(dist4, projDistAndBearing.Item1, Delta);
-			Assert.AreEqual(bearing, projDistAndBearing.Item2, Delta);
+			Assert.That(dist4, Is.EqualTo(projDistAndBearing.Item1).Within(Delta));
+			Assert.That(bearing, Is.EqualTo(projDistAndBearing.Item2).Within(Delta));
 
 
 			wgs84PtA = new PointD(145, -37);
@@ -410,8 +409,8 @@ namespace UnitTests
 			Console.Out.WriteLine("proj bearing:{0:0.00000}deg ", projDistAndBearing.Item2);
 
 			//confirm results same as proj results
-			Assert.AreEqual(dist4, projDistAndBearing.Item1, Delta);
-			Assert.AreEqual(bearing, projDistAndBearing.Item2, Delta);
+			Assert.That(dist4, Is.EqualTo(projDistAndBearing.Item1).Within(Delta));
+			Assert.That(bearing, Is.EqualTo(projDistAndBearing.Item2).Within(Delta));
 
 
 			wgs84PtA = new PointD(0, 0);
@@ -433,8 +432,8 @@ namespace UnitTests
 			Console.Out.WriteLine("proj bearing:{0:0.00000}deg ", projDistAndBearing.Item2);
 
 			//confirm results same as proj results
-			Assert.AreEqual(dist4, projDistAndBearing.Item1, Delta);
-			Assert.AreEqual(bearing, projDistAndBearing.Item2, Delta);
+			Assert.That(dist4, Is.EqualTo(projDistAndBearing.Item1).Within(Delta));
+			Assert.That(bearing, Is.EqualTo(projDistAndBearing.Item2).Within(Delta));
 
 
 			wgs84PtA = new PointD(-45, 0);
@@ -456,8 +455,8 @@ namespace UnitTests
 			Console.Out.WriteLine("proj bearing:{0:0.00000}deg ", projDistAndBearing.Item2);
 
 			//confirm results same as proj results
-			Assert.AreEqual(dist4, projDistAndBearing.Item1, Delta);
-			Assert.AreEqual(bearing, projDistAndBearing.Item2, Delta);
+			Assert.That(dist4, Is.EqualTo(projDistAndBearing.Item1).Within(Delta));
+			Assert.That(bearing, Is.EqualTo(projDistAndBearing.Item2).Within(Delta));
 
 
 			wgs84PtA = new PointD(-90, 0);
@@ -479,8 +478,8 @@ namespace UnitTests
 			Console.Out.WriteLine("proj bearing:{0:0.00000}deg ", projDistAndBearing.Item2);
 
 			//confirm results same as proj results
-			Assert.AreEqual(dist4, projDistAndBearing.Item1, Delta);
-			Assert.AreEqual(bearing, projDistAndBearing.Item2, Delta);
+			Assert.That(dist4, Is.EqualTo(projDistAndBearing.Item1).Within(Delta));
+			Assert.That(bearing, Is.EqualTo(projDistAndBearing.Item2).Within(Delta));
 
 
 			wgs84PtA = new PointD(0, 0);
@@ -502,8 +501,8 @@ namespace UnitTests
 			Console.Out.WriteLine("proj bearing:{0:0.00000}deg ", projDistAndBearing.Item2);
 
 			//confirm results same as proj results
-			Assert.AreEqual(dist4, projDistAndBearing.Item1, Delta);
-			Assert.AreEqual(bearing, projDistAndBearing.Item2, Delta);
+			Assert.That(dist4, Is.EqualTo(projDistAndBearing.Item1).Within(Delta));
+			Assert.That(bearing, Is.EqualTo(projDistAndBearing.Item2).Within(Delta));
 
 
 
@@ -526,8 +525,8 @@ namespace UnitTests
 			Console.Out.WriteLine("proj bearing:{0:0.00000}deg ", projDistAndBearing.Item2);
 
 			//confirm results same as proj results
-			Assert.AreEqual(dist4, projDistAndBearing.Item1, Delta);
-			Assert.AreEqual(bearing, projDistAndBearing.Item2, Delta);
+			Assert.That(dist4, Is.EqualTo(projDistAndBearing.Item1).Within(Delta));
+			Assert.That(bearing, Is.EqualTo(projDistAndBearing.Item2).Within(Delta));
 
 
 
@@ -550,8 +549,8 @@ namespace UnitTests
 			Console.Out.WriteLine("proj bearing:{0:0.00000}deg ", projDistAndBearing.Item2);
 
 			//confirm results same as proj results
-			Assert.AreEqual(dist4, projDistAndBearing.Item1, Delta);
-			Assert.AreEqual(bearing, projDistAndBearing.Item2, Delta);
+			Assert.That(dist4, Is.EqualTo(projDistAndBearing.Item1).Within(Delta));
+			Assert.That(bearing, Is.EqualTo(projDistAndBearing.Item2).Within(Delta));
 
 
 			wgs84PtA = new PointD(140, -35);
@@ -574,7 +573,7 @@ namespace UnitTests
 
 			//Sql Server STDistance result 91287.7884371744
 
-			Assert.AreEqual(dist4, 91287.7884371744, 0.001);
+			Assert.That(dist4, Is.EqualTo(91287.7884371744).Within(0.001));
 
 
 			wgs84PtA = new PointD(140, -35);
@@ -740,18 +739,18 @@ namespace UnitTests
 
 			bool equivalent = crsA.IsEquivalent(crsB);
 
-			Assert.IsTrue(equivalent, "Expected result: CRS created from ESRI WKT format equivalent to CRS created from 2018 WKT2 format");
+			Assert.That(equivalent, Is.True, "Expected result: CRS created from ESRI WKT format equivalent to CRS created from 2018 WKT2 format");
 
-			//DateTime tick = DateTime.Now;
-			//const int Iterations = 10000;
-			//for (int n = 0; n < Iterations; ++n)
-			//{
-			//	equivalent = crsA.IsEquivalent(crsB);
-			//}
-			//DateTime tock = DateTime.Now;
-			//Console.WriteLine("same:{0}. time:{1:0.0000}s", equivalent, tock.Subtract(tick).TotalSeconds/ Iterations);
+            //DateTime tick = DateTime.Now;
+            //const int Iterations = 10000;
+            //for (int n = 0; n < Iterations; ++n)
+            //{
+            //	equivalent = crsA.IsEquivalent(crsB);
+            //}
+            //DateTime tock = DateTime.Now;
+            //Console.WriteLine("same:{0}. time:{1:0.0000}s", equivalent, tock.Subtract(tick).TotalSeconds/ Iterations);
 
-		}
+        }
 
 		[Test]
 		public void TestGda94FromWktAndGda94FromIdIsEquivalent()
@@ -763,9 +762,9 @@ namespace UnitTests
 
 			bool equivalent = crsA.IsEquivalent(crsB);
 
-			Assert.IsTrue(equivalent, "Expected result: CRS created from WKT format equivalent to CRS created from id 3308");
+			Assert.That(equivalent, Is.True, "Expected result: CRS created from WKT format equivalent to CRS created from id 3308");
 
-			DateTime tick = DateTime.Now;
+            DateTime tick = DateTime.Now;
 			const int Iterations = 5000;
 			for (int n = 0; n < Iterations; ++n)
 			{
@@ -776,7 +775,7 @@ namespace UnitTests
 
 			equivalent = crsB.IsEquivalent(crsA);
 
-			Assert.IsTrue(equivalent, "Expected result: CRS created from WKT format equivalent to CRS created from id 3308");
+			Assert.That(equivalent, Is.True, "Expected result: CRS created from WKT format equivalent to CRS created from id 3308");
 
 			tick = DateTime.Now;
 			for (int n = 0; n < Iterations; ++n)
@@ -796,7 +795,7 @@ namespace UnitTests
 			
 			bool equivalent = wgs84CRS.IsEquivalent(null);
 
-			Assert.IsFalse(equivalent, "Expected result: CRS not equivalent to null CRS");
+			Assert.That(equivalent, Is.False, "Expected result: CRS not equivalent to null CRS");
 		}
 
         [Test]
@@ -823,8 +822,8 @@ namespace UnitTests
 
 				PointD roundTripPt = transformation.Transform(arkansasPt, TransformDirection.Inverse);
 
-                Assert.True(Math.Abs(wgs84Pt.X - roundTripPt.X) < Delta);
-                Assert.True(Math.Abs(wgs84Pt.Y - roundTripPt.Y) < Delta);
+                Assert.That(Math.Abs(wgs84Pt.X - roundTripPt.X) < Delta, Is.True);
+                Assert.That(Math.Abs(wgs84Pt.Y - roundTripPt.Y) < Delta, Is.True);
             }
         }
 
@@ -885,9 +884,9 @@ namespace UnitTests
 
 			Assert.Multiple(() =>
 			{
-				Assert.AreEqual(crs1.Id, "27700", "crs1 Id should be 27700");
-				Assert.AreEqual(crs2.Id, "27700", "crs2 Id should be 27700");
-				Assert.IsTrue(crs1.IsEquivalent(crs2), "crs1 and crs2 should be equivalent");
+				Assert.That(crs1.Id, Is.EqualTo("27700"), "crs1 Id should be 27700");
+				Assert.That(crs2.Id, Is.EqualTo("27700"), "crs2 Id should be 27700");
+				Assert.That(crs1.IsEquivalent(crs2), Is.True, "crs1 and crs2 should be equivalent");
 			});
 
 			//test recreating from the CRS wkt
@@ -899,9 +898,9 @@ namespace UnitTests
 
 			Assert.Multiple(() =>
 			{
-				Assert.AreEqual(crs1.Id, "27700", "crs1 Id should be 27700");
-				Assert.AreEqual(crs2.Id, "27700", "crs2 Id should be 27700");
-				Assert.IsTrue(crs1.IsEquivalent(crs2), "crs1 and crs2 should be equivalent");
+				Assert.That(crs1.Id, Is.EqualTo("27700"), "crs1 Id should be 27700");
+				Assert.That(crs2.Id, Is.EqualTo("27700"), "crs2 Id should be 27700");
+				Assert.That(crs1.IsEquivalent(crs2), Is.True, "crs1 and crs2 should be equivalent");
 			});
 
 
@@ -916,9 +915,9 @@ namespace UnitTests
 			
 			Assert.Multiple(() =>
 			{
-				Assert.AreEqual(crs1.Id, "27700", "crs1 Id should be 27700");
-				Assert.AreEqual(crs2.Id, "27700", "crs2 Id should be 27700");
-				Assert.IsTrue(crs1.IsEquivalent(crs2), "crs1 and crs2 should be equivalent");
+				Assert.That(crs1.Id, Is.EqualTo("27700"), "crs1 Id should be 27700");
+				Assert.That(crs2.Id, Is.EqualTo("27700"), "crs2 Id should be 27700");
+				Assert.That(crs1.IsEquivalent(crs2), Is.True, "crs1 and crs2 should be equivalent");
 			});
 
 
@@ -932,9 +931,9 @@ namespace UnitTests
 
 			Assert.Multiple(() =>
 			{
-				Assert.AreEqual(crs1.Id, "27700", "crs1 Id should be 27700");
-				Assert.AreEqual(crs2.Id, "27700", "crs2 Id should be 27700");
-				Assert.IsTrue(crs1.IsEquivalent(crs2), "crs1 and crs2 should be equivalent");
+				Assert.That(crs1.Id, Is.EqualTo("27700"), "crs1 Id should be 27700");
+				Assert.That(crs2.Id, Is.EqualTo("27700"), "crs2 Id should be 27700");
+				Assert.That(crs1.IsEquivalent(crs2), Is.True, "crs1 and crs2 should be equivalent");
 			});
 
 			string prjFile1 = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "data", "27700", "TV69_line_ERROR.prj");
@@ -947,10 +946,10 @@ namespace UnitTests
 			var crs3 = EGIS.Projections.CoordinateReferenceSystemFactory.Default.CreateCRSFromPrjFile(prjFile3);
 			Assert.Multiple(() =>
 			{
-				Assert.AreEqual(crs1.Id, "27700", "crs1 Id should be 27700");
-				Assert.AreEqual(crs2.Id, "27700", "crs2 Id should be 27700");
+				Assert.That(crs1.Id, Is.EqualTo("27700"), "crs1 Id should be 27700");
+				Assert.That(crs2.Id, Is.EqualTo("27700"), "crs2 Id should be 27700");
 			    //Assert.AreEqual(crs3.Id, "27700", "crs3 Id should be 27700");
-				Assert.IsTrue(crs1.IsEquivalent(crs2), "crs1 and crs2 should be equivalent");
+				Assert.That(crs1.IsEquivalent(crs2), Is.True, "crs1 and crs2 should be equivalent");
 				//Assert.IsTrue(crs1.IsEquivalent(crs3), "crs1 and crs3 should be equivalent");
 			});
 
@@ -969,9 +968,9 @@ namespace UnitTests
 
 			Assert.Multiple(() =>
 			{
-				Assert.AreEqual(crs1.Id, "27700", "crs1 Id should be 27700");
-				Assert.AreEqual(crs2.Id, "27700", "crs2 Id should be 27700");
-				Assert.IsTrue(crs1.IsEquivalent(crs2), "crs1 and crs2 should be equivalent");
+				Assert.That(crs1.Id, Is.EqualTo("27700"), "crs1 Id should be 27700");
+				Assert.That(crs2.Id, Is.EqualTo("27700"), "crs2 Id should be 27700");
+				Assert.That(crs1.IsEquivalent(crs2), Is.True, "crs1 and crs2 should be equivalent");
 			});
 
 

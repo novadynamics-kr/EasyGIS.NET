@@ -143,14 +143,14 @@ namespace UnitTests
             Console.WriteLine();
 
             double minX = clippedPolygon.Select(p => p.X).Min();
-            Assert.GreaterOrEqual(minX, clipBounds.XMin, "clipped polygon min x coordinate is < clipping bounds");
+            Assert.That(minX, Is.GreaterThanOrEqualTo(clipBounds.XMin), "clipped polygon min x coordinate is < clipping bounds");
             double maxX = clippedPolygon.Select(p => p.X).Max();
-            Assert.LessOrEqual(maxX, clipBounds.XMax, "clipped polygon max x coordinate is > clipping bounds");
+            Assert.That(maxX, Is.LessThanOrEqualTo(clipBounds.XMax), "clipped polygon max x coordinate is > clipping bounds");
 
             double minY = clippedPolygon.Select(p => p.Y).Min();
-            Assert.GreaterOrEqual(minY, clipBounds.YMin, "clipped polygon min y coordinate is < clipping bounds");
+            Assert.That(minY, Is.GreaterThanOrEqualTo(clipBounds.YMin), "clipped polygon min y coordinate is < clipping bounds");
             double maxY = clippedPolygon.Select(p => p.Y).Max();
-            Assert.LessOrEqual(maxY, clipBounds.YMax, "clipped polygon max y coordinate is > clipping bounds");
+            Assert.That(maxY, Is.LessThanOrEqualTo(clipBounds.YMax), "clipped polygon max y coordinate is > clipping bounds");
 
 
             //const int Scale = 20;
@@ -189,7 +189,7 @@ namespace UnitTests
             //Console.WriteLine();
 
 
-		}
+        }
         
         [Test]
         public void ClipPolygonHole()
@@ -228,8 +228,8 @@ namespace UnitTests
             bool polygonIsHole = GeometryAlgorithms.IsPolygonHole(polygon, polygon.Length);
             bool holeIsHole = GeometryAlgorithms.IsPolygonHole(hole, hole.Length);
 
-            Assert.IsFalse(polygonIsHole, "polygon should not be a hole - points order should be reversed");
-            Assert.IsTrue(holeIsHole, "hole pts wrong order and not detected as a hole");
+            Assert.That(polygonIsHole, Is.False, "polygon should not be a hole - points order should be reversed");
+            Assert.That(holeIsHole, Is.True, "hole pts wrong order and not detected as a hole");
 
             GeometryAlgorithms.PolygonClip(polygon, 7, clipBounds, clippedPolygon);
 
@@ -238,8 +238,8 @@ namespace UnitTests
             bool clippedPolygonIsHole = GeometryAlgorithms.IsPolygonHole(clippedPolygon, clippedPolygon.Count);
             bool clippedHoleIsHole = GeometryAlgorithms.IsPolygonHole(clippedHole, clippedHole.Count);
 
-            Assert.AreEqual(polygonIsHole, clippedPolygonIsHole, "Clipped polygon order changed after clipping");
-            Assert.AreEqual(holeIsHole, clippedHoleIsHole, "Clipped hole order changed after clipping");
+            Assert.That(clippedPolygonIsHole, Is.EqualTo(polygonIsHole), "Clipped polygon order changed after clipping");
+            Assert.That(clippedHoleIsHole, Is.EqualTo(holeIsHole), "Clipped hole order changed after clipping");
 
 
             //         for (int n = 0; n < polygon.Length; ++n)

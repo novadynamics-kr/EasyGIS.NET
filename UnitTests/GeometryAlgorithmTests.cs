@@ -1,18 +1,13 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EGIS.Projections;
 using EGIS.ShapeFileLib;
-using System.Windows.Forms;
+using NUnit.Framework;
+using System;
 using System.IO;
 using System.Reflection;
-using EGIS.Projections;
 
 namespace UnitTests
 {
-	[TestFixture]
+    [TestFixture]
 	public class GeometryAlgorithmTests
 	{
 
@@ -25,11 +20,11 @@ namespace UnitTests
 									
 			double d = GeometryAlgorithms.LineSegPointDist(ref p1, ref p2, ref p3);
 
-			Assert.AreEqual(d, 0, double.Epsilon, "Distance should be zero"); 
-			d = GeometryAlgorithms.LineSegPointDist(ref p2, ref p1, ref p3);
+			Assert.That(d, Is.EqualTo(0).Within(double.Epsilon), "Distance should be zero");
+            d = GeometryAlgorithms.LineSegPointDist(ref p2, ref p1, ref p3);
 			
-			Assert.AreEqual(d, 0, double.Epsilon, "Distance should be zero when segment points reversed");
-		}
+			Assert.That(d, Is.EqualTo(0).Within(double.Epsilon), "Distance should be zero when segment points reversed");
+        }
 
 		[Test]
 		public void LineSegPointDistTest_PerpindicularPoint()
@@ -40,11 +35,11 @@ namespace UnitTests
 
 			double d = GeometryAlgorithms.LineSegPointDist(ref p1, ref p2, ref p3);
 
-			Assert.AreEqual(d, 5, double.Epsilon, "Distance should be 5");
-			d = GeometryAlgorithms.LineSegPointDist(ref p2, ref p1, ref p3);
+			Assert.That(d, Is.EqualTo(5).Within(double.Epsilon), "Distance should be 5");
+            d = GeometryAlgorithms.LineSegPointDist(ref p2, ref p1, ref p3);
 
-			Assert.AreEqual(d, 5, double.Epsilon, "Distance should be 5 when segment points reversed");
-		}
+			Assert.That(d, Is.EqualTo(5).Within(double.Epsilon), "Distance should be 5 when segment points reversed");
+        }
 
 [Test]
 public void TestClosestPointOnPolyLine()

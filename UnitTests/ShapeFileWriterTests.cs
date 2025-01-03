@@ -67,15 +67,15 @@ namespace UnitTests
 
 				using (ShapeFile sf = new ShapeFile(System.IO.Path.Combine(outputDir, shapeFileName)))
 				{
-					Assert.IsTrue(sf.RecordCount == 3,"Multipoint shapefile should contain 3 records");
+					Assert.That(sf.RecordCount == 3, Is.True, "Multipoint shapefile should contain 3 records");
 
 					//read the 3rd record
 					var geometry = sf.GetShapeDataD(2);
 
-					Assert.IsTrue(geometry[0].Length == 4, "4th record should contain 4 points");
+					Assert.That(geometry[0].Length == 4, Is.True, "4th record should contain 4 points");
 
-					Assert.AreEqual(geometry[0][3].X,145, 0.0000001, "last point of record 4 has unexpected x coordinate");
-					Assert.AreEqual(geometry[0][3].Y, -38.7, 0.0000001, "last point of record 4 has unexpected y coordinate");
+					Assert.That(geometry[0][3].X, Is.EqualTo(145).Within(0.0000001), "last point of record 4 has unexpected x coordinate");
+					Assert.That(geometry[0][3].Y, Is.EqualTo(-38.7).Within(0.0000001), "last point of record 4 has unexpected y coordinate");
 
 
 					var shapeFileExtent = sf.Extent;
@@ -83,12 +83,13 @@ namespace UnitTests
 					//note that the RectangleD Top and Bottom are swapped as the RectangleD was originally derived using screen coordinates
 					RectangleD expectedExtent = RectangleD.FromLTRB(145, -38.7, 147, -36);
 
-					Assert.AreEqual(shapeFileExtent.Left, expectedExtent.Left, 0.0000001, "extent Xmin value should be :{0}", expectedExtent.Left);
-					Assert.AreEqual(shapeFileExtent.Right, expectedExtent.Right, 0.0000001, "extent Xmax value should be :{0}", expectedExtent.Right);
-					Assert.AreEqual(shapeFileExtent.Top, expectedExtent.Top, 0.0000001, "extent Ymin value should be :{0}", expectedExtent.Top);
-					Assert.AreEqual(shapeFileExtent.Bottom, expectedExtent.Bottom, 0.0000001, "extent Ymax value should be :{0}", expectedExtent.Bottom);
+					Assert.That(shapeFileExtent.Left, Is.EqualTo(expectedExtent.Left).Within(0.0000001), $"extent Xmin value should be :{expectedExtent.Left}");
+                    Assert.That(shapeFileExtent.Left, Is.EqualTo(expectedExtent.Left).Within(0.0000001), $"extent Xmin value should be :{expectedExtent.Left}");
+					Assert.That(shapeFileExtent.Right, Is.EqualTo(expectedExtent.Right).Within(0.0000001), $"extent Xmax value should be :{expectedExtent.Right}");
+					Assert.That(shapeFileExtent.Top, Is.EqualTo(expectedExtent.Top).Within(0.0000001), $"extent Ymin value should be :{expectedExtent.Top}");
+					Assert.That(shapeFileExtent.Bottom, Is.EqualTo(expectedExtent.Bottom).Within(0.0000001), $"extent Ymax value should be :{expectedExtent.Bottom}");
 
-					Assert.IsTrue(sf.CoordinateReferenceSystem.IsEquivalent(wgs84Crs),"shapefile CRS should be wgs84");
+					Assert.That(sf.CoordinateReferenceSystem.IsEquivalent(wgs84Crs), Is.True, "shapefile CRS should be wgs84");
 				}
 
 			}
