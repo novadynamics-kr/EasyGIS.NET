@@ -39,6 +39,7 @@ using System.Xml;
 //[assembly: CLSCompliant(true)]
 namespace EGIS.Controls
 {
+    [ToolboxItem(true)]
     /// <summary>
     /// SFMap (ShapeFile Map) is a .NET ShapeFile Control which displays shapefiles in a .NET Windows Form application
     /// </summary>

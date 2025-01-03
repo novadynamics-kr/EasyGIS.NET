@@ -1,31 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!--<TargetFramework>netstandard2.0</TargetFramework>-->
-    <TargetFrameworks>net47;net472;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net47;net472;net6.0-windows;net8.0-windows</TargetFrameworks>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Debug\EGIS.Projections.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Debug\EGIS.Projections.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\EGIS.Projections.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DocumentationFile>bin\Release\EGIS.Projections.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
@@ -35,23 +15,10 @@
     <AssemblyOriginatorKeyFile>egis.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|AnyCPU'">
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|x64'">
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|AnyCPU'">
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|x64'">
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <ItemGroup>
-    
     <Content Include="Proj\proj.db">
       <PackageCopyToOutput>true</PackageCopyToOutput>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <PackagePath>contentFiles\any\any\Proj</PackagePath>
     </Content>
   </ItemGroup>
@@ -75,22 +42,16 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <PackageCopyToOutput>true</PackageCopyToOutput>
       <PackagePath>contentFiles\any\any\Proj\x86</PackagePath>
-    </Content>    
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
   </ItemGroup>
- 
-  <ItemGroup>    
-    <None Include="build\net47\**" Pack="true" PackagePath="\build\net47" />    
+  <ItemGroup>
+    <None Update="Proj\proj_license.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <ItemGroup>    
-    <None Include="build\net6.0\**" Pack="true" PackagePath="\build\net6.0" />    
-  </ItemGroup>
-  <ItemGroup>    
-    <None Include="build\net6.0-windows\**" Pack="true" PackagePath="\build\net6.0-windows" />    
-  </ItemGroup>
-  
   <PropertyGroup>
     <PackageId>$(AssemblyTitle)</PackageId>
     <Version>4.8.8</Version>
@@ -110,6 +71,4 @@ C# wrapper of native proj_9_0 library</Description>
     <Nullable>disable</Nullable>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  
- 
 </Project>

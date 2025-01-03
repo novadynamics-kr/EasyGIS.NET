@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!--<TargetFramework>net6.0-windows</TargetFramework>-->
-    <TargetFrameworks>net47;net472;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net47;net472;net6.0-windows;net8.0-windows</TargetFrameworks>
     <OutputType>Library</OutputType>
     <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>egis.snk</AssemblyOriginatorKeyFile>
@@ -24,40 +23,8 @@
     <Nullable>disable</Nullable>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Debug\egis.ShapeFileLib.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Release\egis.ShapeFileLib.XML</DocumentationFile>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>
-    </DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>
-    </DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|AnyCPU'">
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|AnyCPU'">
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <None Include="egis.pfx" />
@@ -75,9 +42,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EGIS.Projections\EGIS.Projections.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="build\net47\**" Pack="true" PackagePath="\build\net47" />
   </ItemGroup>
-
 </Project>
