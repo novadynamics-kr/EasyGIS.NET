@@ -54,7 +54,7 @@
   </ItemGroup>
   <PropertyGroup>
     <PackageId>$(AssemblyTitle)</PackageId>
-    <Version>4.8.8</Version>
+    <Version>4.8.9</Version>
     <Authors>Winston Fletcher</Authors>
     <Company>$(Company)</Company>
     <Description>Easy GIS .NET GIS Projections Class Library.
@@ -63,7 +63,7 @@ C# wrapper of native proj_9_0 library</Description>
     <RepositoryUrl>https://github.com/wfletcher/EasyGIS.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
-    <Copyright>Copyright © 2008-2023 Winston Fletcher</Copyright>
+    <Copyright>Copyright © 2008-2025 Winston Fletcher</Copyright>
     <PackageTags>Easy GIS .NET Projection Library, native proj 9.0 C# wrapper</PackageTags>
     <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>

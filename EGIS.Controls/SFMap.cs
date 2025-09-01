@@ -331,39 +331,13 @@ namespace EGIS.Controls
 
 
         /// <summary>
-        /// SFMap contructor
+        /// Initializes a new <see cref="SFMap"/> control with the default settings
+        /// (WGS-84 CRS, zoom level 1 : 1, default mouse-wheel zoom mode).  
+        /// This parameter-less constructor exists primarily for the WinForms
+        /// designer, and delegates to the main constructor.
         /// </summary>
-        public SFMap()
-        {
-            int CRSById = EGIS.Projections.CoordinateReferenceSystemFactory.Wgs84EpsgCode;
-
-            InitializeComponent();
-
-            this.SetStyle(ControlStyles.ResizeRedraw, true);
-            this.SetStyle(ControlStyles.Selectable, true);
-            _mapBackColor = BackColor;
-            this.layerTooltip.IsBalloon = _useBalloonToolTip;
-            if (_useBalloonToolTip)
-            {
-                this.toolTipOffset = new Point(5, 5);
-            }
-            //set default CRS to WGS84
-            try
-            {
-                if (!DesignMode)
-                {
-                    var crs = EGIS.Projections.CoordinateReferenceSystemFactory.Default.GetCRSById(CRSById);
-                    MapCoordinateReferenceSystem = crs;
-                }
-            }
-            catch
-            {
-            }
-            MaxZoomLevel = double.MaxValue;
-            ZoomLevel = 1.0;
-
-            MouseWheelZoomMode = MouseWheelZoomMode.Default;
-        }
+        public SFMap() : this(EGIS.Projections.CoordinateReferenceSystemFactory.Wgs84EpsgCode)
+        { }
 
         /// <summary>
         /// SFMap contructor
