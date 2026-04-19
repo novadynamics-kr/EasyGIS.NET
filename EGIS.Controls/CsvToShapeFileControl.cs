@@ -52,14 +52,15 @@ namespace EGIS.Controls
             
         }
 
-		#endregion
+        #endregion
 
-		#region public members
+        #region public members
 
         /// <summary>
         /// Source CSV data file path
         /// </summary>
-		public string SourceDataFile
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public string SourceDataFile
         {
             get
             {
@@ -76,6 +77,7 @@ namespace EGIS.Controls
         /// <summary>
         /// Destination ShapeFile file path
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string DestinationShapeFile
         {
             get
@@ -95,6 +97,7 @@ namespace EGIS.Controls
         /// <summary>
         /// The CoordinateRefereneSystem of the XY data
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public EGIS.Projections.ICRS CoordinateReferenceSystem
         {
             get

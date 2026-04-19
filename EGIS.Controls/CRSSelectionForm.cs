@@ -44,6 +44,7 @@ namespace EGIS.Controls
         /// <summary>
         /// Get/Set the selected ICRS
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ICRS SelectedCRS
         {
             get

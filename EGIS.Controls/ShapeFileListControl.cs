@@ -140,6 +140,7 @@ namespace EGIS.Controls
         /// <summary>
         /// Reference to the SFMap that the ShapeFileListControl layers is associated with
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public SFMap Map
         {
             get

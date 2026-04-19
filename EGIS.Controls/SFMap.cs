@@ -498,6 +498,7 @@ namespace EGIS.Controls
         /// The maximum zoom level allowed. If zoom level is set to a higher zoom level it will be restricted to MaxZoomLevel.
         /// Default is double.MaxValue (unlimited zoom)
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public double MaxZoomLevel
         {            
             get;
@@ -508,6 +509,7 @@ namespace EGIS.Controls
         /// The minimum zoom level allowed. If zoom level is set to a lower zoom level it will be restricted to MinZoomLevel.
         /// Default is 0 
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public double MinZomLevel
         {
             get;
@@ -564,7 +566,7 @@ namespace EGIS.Controls
         /// </remarks>
         /// <seealso cref="ZoomLevel"/>
         [Obsolete("Superceded by CentrePoint2D to use double-precision floating-point coordinates"), Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public PointF CentrePoint
         {
             get
@@ -595,7 +597,7 @@ namespace EGIS.Controls
         /// </para>
         /// </remarks>
         /// <seealso cref="ZoomLevel"/>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public PointD CentrePoint2D
         {
             get
@@ -616,6 +618,7 @@ namespace EGIS.Controls
         /// <summary>
         /// Gets or sets the color on the map background
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public Color MapBackColor
         {
             get
@@ -652,6 +655,7 @@ namespace EGIS.Controls
         /// </para>        
         /// </remarks>
         /// <seealso cref="EGIS.ShapeFileLib.RenderQuality"/>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public EGIS.ShapeFileLib.RenderQuality RenderQuality
         {
             get
@@ -673,6 +677,7 @@ namespace EGIS.Controls
         /// <summary>
         /// Gets or sets whether to render the map using the MercatorProjection
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool UseMercatorProjection
         {
             get
@@ -704,7 +709,7 @@ namespace EGIS.Controls
         /// <summary>
         /// Get/Set the map Coordinate Reference System
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public ICRS MapCoordinateReferenceSystem
         {
             get
@@ -754,6 +759,7 @@ namespace EGIS.Controls
         /// If UseMemoryStreams is changed it will only apply to any new ShapeFiles added to the map.        
         /// </para>
         /// </remarks>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool UseMemoryStreams
         {
             get;
@@ -1602,6 +1608,7 @@ namespace EGIS.Controls
         /// <summary>
         /// The default Cursor of the control
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public Cursor DefaultMapCursor
         {
             set
@@ -1620,6 +1627,7 @@ namespace EGIS.Controls
         /// <summary>
         /// The default Cursor of the control when the mouse is over a shape that can be selected. Default is Cursors.Hand
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public Cursor DefaultSelectionCursor
         {
             set
@@ -2286,6 +2294,7 @@ namespace EGIS.Controls
         /// <summary>
         /// get/set current PanSelectMode
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public PanSelectMode PanSelectMode
         {
             get
@@ -2300,10 +2309,11 @@ namespace EGIS.Controls
 
         private bool _ctrlDragToZoom;
 
-        
+
         /// <summary>
         /// get/set whether to zoom to selection if control key is down. If false default behaviour is to select records
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public bool ZoomToSelectedExtentWhenCtrlKeydown
         {
             get { return _ctrlDragToZoom; }
@@ -2321,6 +2331,7 @@ namespace EGIS.Controls
         /// the use of these keys individually
         /// </para>
         /// </remarks>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public SelectKeys EnabledSelectKeys
         {
             get;
@@ -2330,6 +2341,7 @@ namespace EGIS.Controls
         /// <summary>
         /// Mouse Wheel Zoom mode used to control zoom behaviour 
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public MouseWheelZoomMode MouseWheelZoomMode
         {
             get;

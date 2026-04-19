@@ -69,6 +69,7 @@ namespace EGIS.Controls
         /// <summary>
         /// Get/Set the Selected Coordinate Reference System
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ICRS SelectedCRS
         {
             get
