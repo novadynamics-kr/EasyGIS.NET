@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks></TargetFrameworks>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Platforms>AnyCPU</Platforms>
@@ -65,6 +64,6 @@ C# wrapper of native proj_9_0 library</Description>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <Nullable>disable</Nullable>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
   </PropertyGroup>
 </Project>
